@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="#303F9F"
+        android:gravity="center"
+        android:text="STO Read SMS"
+        android:textColor="#ffffff"
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="124dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spn_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1"
+                android:paddingLeft="0dp">
+
+            </Spinner>
+
+            <EditText
+                android:id="@+id/edt_url"
+                android:layout_width="240dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="10.0dip"
+                android:layout_marginLeft="-8dp"
+                android:layout_marginRight="10.0dip"
+                android:layout_weight="7"
+                android:background="@drawable/background_edt"
+                android:padding="10.0dip"
+                android:singleLine="true"
+                android:textSize="14.0sp" />
+
+        </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/edt_id"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="32dp"
+            android:layout_weight="7"
+            android:background="@drawable/background_edt"
+            android:gravity="center"
+            android:hint="Username" />
+
+
+        <EditText
+            android:id="@+id/edt_serect"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/background_edt"
+            android:gravity="center"
+            android:hint="Password"
+            android:inputType="textPassword" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="400dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="340dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_button"
+            android:elevation="10dp"
+            android:text="OK"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/btn_edt"
+            android:layout_width="340dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_btn_edt"
+            android:elevation="10dp"
+            android:text="Edit"
+            android:textColor="#ffffff" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
