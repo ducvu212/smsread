@@ -2,6 +2,7 @@ package com.example.root.smsread.api;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -69,11 +70,15 @@ public class ApiHandle implements ApiConstants, AppConstants {
         AppUtil.log("=========extra: " + extra);
         try {
             JSONObject jsonParams = new JSONObject();
-            jsonParams.put("client_id", input1);
-            jsonParams.put("client_serect", input2);
+            jsonParams.put("username", input1);
+            jsonParams.put("password", input2);
+            jsonParams.put("content", "test") ;
+            Log.d("TestIF", input1 + "\n" + input2) ;
             StringEntity strentity = new StringEntity(jsonParams.toString(), "UTF-8");
             AsyncHttpClient client = new AsyncHttpClient();
             System.out.println("json param : " + jsonParams);
+            client.addHeader("username", input1 );
+            client.addHeader("password", input2 );
             client.setConnectTimeout(60);
             client.post(context, url, strentity, RequestParams.APPLICATION_JSON, new TextHttpResponseHandler("UTF-8") {
                 public void onSuccess(int arg0, Header[] arg1, String arg2) {
@@ -85,7 +90,7 @@ public class ApiHandle implements ApiConstants, AppConstants {
 
                 @SuppressLint("ShowToast")
                 public void onFailure(int arg0, Header[] arg1, String arg2, Throwable arg3) {
-                    AppUtil.log(url + "==============onFailure: " + arg2);
+                    AppUtil.log(url + "==============onFailure: " + arg2 );
                     Toast.makeText(context.getApplicationContext(), "Không thể kết nối tới URL. Xin kiểm tra lại!",Toast.LENGTH_SHORT).show(); ;
                     if (callback != null) {
                         callback.onComplete(url, arg2, extra);
@@ -98,18 +103,19 @@ public class ApiHandle implements ApiConstants, AppConstants {
         }
     }
 
-    private static void requestPostSMS(final Context context, final String url, String input1, RequestParams requestParams, final ApiCallback callback, final Object extra) {
+    private static void requestPostSMS(final Context context, final String url, String input1, String username, String password , String number ,RequestParams requestParams, final ApiCallback callback, final Object extra) {
         AppUtil.log("=========request: " + url);
         AppUtil.log("=========params: " + requestParams);
         AppUtil.log("=========extra: " + extra);
         try {
             JSONObject jsonParams = new JSONObject();
             jsonParams.put(AppConstants.EXTRA_MESSAGE, input1);
+            jsonParams.put("from_number", number) ;
             StringEntity strentity = new StringEntity(jsonParams.toString(), "UTF-8");
             AsyncHttpClient client = new AsyncHttpClient();
             System.out.println("json param SMS : " + jsonParams);
-            client.addHeader("username", "admin" );
-            client.addHeader("password", "@@Admin1234" );
+            client.addHeader("username", username );
+            client.addHeader("password", password );
             client.setConnectTimeout(60);
             client.post(context, url, strentity, RequestParams.APPLICATION_JSON, new TextHttpResponseHandler("UTF-8") {
                 public void onSuccess(int arg0, Header[] arg1, String arg2) {
@@ -141,10 +147,10 @@ public class ApiHandle implements ApiConstants, AppConstants {
         requestPostLogin(context, entity3, entity1, entity2, createRequestParams(new ArrayList()), callback, null);
     }
 
-    public static void SMS(Context context, ApiCallback callback, String entity1, String entity3) {
+    public static void SMS(Context context, ApiCallback callback, String entity1, String entity3, String entity4, String entity5, String entity6) {
         if (callback != null) {
             callback.onProgress(entity3);
         }
-        requestPostSMS(context, entity3, entity1, createRequestParams(new ArrayList()), callback, null);
+        requestPostSMS(context, entity3, entity1, entity4, entity5, entity6 , createRequestParams(new ArrayList()), callback, null);
     }
 }

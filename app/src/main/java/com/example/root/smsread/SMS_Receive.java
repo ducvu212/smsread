@@ -46,7 +46,7 @@ public class SMS_Receive extends AppCompatActivity implements ApiHandle.ApiCallb
 
             addressField.setText("Message From : " +address);
             messageField.setText("Messsage : "+message);
-            ApiHandle.SMS(getApplicationContext(), this, message, url);
+//            ApiHandle.SMS(getApplicationContext(), this, message, url);
             Log.d("MESSSSSS", message) ;
         }
        /* msg = (Button)findViewById(R.id.btn_msg);

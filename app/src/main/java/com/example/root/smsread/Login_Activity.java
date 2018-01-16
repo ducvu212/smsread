@@ -2,10 +2,15 @@ package com.example.root.smsread;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -30,21 +35,47 @@ public class Login_Activity extends AppCompatActivity implements View.OnClickLis
     public static String url;
     public static String TaiKhoan, MatKhau, urlType;
     private Button btnOk, btnEdt;
-    private int Pos ;
+    private int Pos;
     private final int MY_PERMISSION = 123;
+    private int count = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        SharedPreferences preferences = getSharedPreferences("com.example.root.smsread.count", MODE_PRIVATE) ;
+        SharedPreferences.Editor editorr = preferences.edit() ;
+        preferences.getInt("count", 0);
+
+        if (preferences.getInt("count", 0) == 1) {
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Xin cấp quyền cho ứng dụng")
+                    .setMessage("Bạn hãy cấp quyền truy cập SMS và Bộ Nhớ để ứng dụng có thể hoạt động. " +
+                            "Hãy nhấn Đồng ý (Allow) để cấp quyền ")
+                    .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).setCancelable(false).create().show();
+            editorr.putInt("count", 2 ) ;
+            editorr.apply();
+//
+        }
         checkPer();
+
+        preferences.getInt("count", 0);
         findViewByIds();
         inits();
         setEvents();
-        checkData() ;
+        checkData();
     }
 
     private void checkPer() {
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
                 != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
@@ -56,47 +87,74 @@ public class Login_Activity extends AppCompatActivity implements View.OnClickLis
                     Manifest.permission.BROADCAST_SMS,
                     Manifest.permission.INTERNET,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.ACCESS_NETWORK_STATE
+                    Manifest.permission.ACCESS_NETWORK_STATE,
+                    Manifest.permission.READ_CONTACTS,
+                    Manifest.permission.WRITE_CONTACTS
 
             }, MY_PERMISSION);
-
-//            new AlertDialog.Builder(this)
-//                    .setTitle("Confirm Permission for Application")
-//                    .setMessage("Please Select Permissions and Enable SMS If You Not Allow Or Cancel If You Allow ")
-//                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            Intent intent = new Intent();
-//                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                            Uri uri = Uri.fromParts("package",
-//                                    Login_Activity.this.getPackageName(), null);
-//                            intent.setData(uri);
-//                            startActivityForResult(intent, 101);
-//                        }
-//                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.READ_SMS)
-//                            != PackageManager.PERMISSION_GRANTED &&
-//                            ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.READ_SMS)
-//                                    != PackageManager.PERMISSION_GRANTED) {
-//
-//
-//                        onBackPressed();
-//                        return;
-//                    } else {
-//                        dialog.dismiss();
-//                    }
-//
-//                }
-//            }).create().show();
-
-            return;
-
         }
-        else {
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(Login_Activity.this, new String[]{
+                    Manifest.permission.READ_SMS,
+                    Manifest.permission.RECEIVE_SMS,
+                    Manifest.permission.BROADCAST_SMS,
+                    Manifest.permission.INTERNET,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.ACCESS_NETWORK_STATE,
+                    Manifest.permission.READ_CONTACTS,
+                    Manifest.permission.WRITE_CONTACTS
+
+            }, MY_PERMISSION);
         }
+
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Xin cấp quyền cho ứng dụng")
+                    .setMessage("Bạn hãy cấp quyền truy cập SMS và Bộ Nhớ để ứng dụng có thể hoạt động. " +
+                            "Hãy nhấn Cancel nếu đã cấp quyền ")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent();
+                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package",
+                                    Login_Activity.this.getPackageName(), null);
+                            intent.setData(uri);
+                            startActivityForResult(intent, 101);
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.READ_SMS)
+                            != PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.READ_SMS)
+                                    != PackageManager.PERMISSION_GRANTED) {
+
+
+                        onBackPressed();
+                        return;
+                    } if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                                    != PackageManager.PERMISSION_GRANTED) {
+
+
+                        onBackPressed();
+                        return;
+                    }
+                    else {
+                        dialog.dismiss();
+                    }
+
+                }
+            }).create().show();
+
+
     }
 
 
@@ -109,7 +167,7 @@ public class Login_Activity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (Pos == i) {
-                    type = "";
+                    type = spnType.getItemAtPosition(i).toString();
                 } else {
                     Toast.makeText(getBaseContext(), spnType.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
                     type = spnType.getSelectedItem().toString();
@@ -170,16 +228,18 @@ public class Login_Activity extends AppCompatActivity implements View.OnClickLis
     public void Login() {
         TaiKhoan = this.edtId.getText().toString();
         MatKhau = this.edtSerect.getText().toString();
-        url = this.edtUrl.getText().toString() ;
-        urlType = type + this.edtUrl.getText().toString();
+        url = this.edtUrl.getText().toString();
+        urlType = spnType.getItemAtPosition(Pos) + this.edtUrl.getText().toString();
         SharedPreferences sp = getSharedPreferences("com.example.root.smsread", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.clear() ;
+        editor.clear();
         editor.putString("url", url);
         editor.putString("urlType", urlType);
         editor.putString("client_id", TaiKhoan);
         editor.putString("client_serect", MatKhau);
-        editor.putInt("type", Pos) ;
+        editor.putInt("type", Pos);
+
+
         editor.apply();
 
         if (url.matches("")) {
@@ -189,7 +249,11 @@ public class Login_Activity extends AppCompatActivity implements View.OnClickLis
         } else if (MatKhau.matches("")) {
             Toast.makeText(getApplicationContext(), "Vui lòng nhập Client Serect", Toast.LENGTH_SHORT).show();
         } else {
-            ApiHandle.Login(getApplicationContext(), this, TaiKhoan, MatKhau, this.type + url);
+            url = url.trim();
+            url = url.replaceAll("\\s+", " ");
+            Log.d("AAAAAAAAAAAA", this.type + url);
+            ApiHandle.Login(getApplicationContext(), this, TaiKhoan, MatKhau, this.type + url.trim());
+            Log.d("Loginnnn", TaiKhoan + "\n" + MatKhau + "\n" + this.type + url);
             btnOk.setVisibility(View.GONE);
             edtUrl.setEnabled(false);
             edtUrl.setFocusable(false);
@@ -206,11 +270,11 @@ public class Login_Activity extends AppCompatActivity implements View.OnClickLis
         String url = sp.getString("url", "");
         String client_id = sp.getString("client_id", "");
         String client_serect = sp.getString("client_serect", "");
-        int typePos = sp.getInt("type", 0) ;
+        int typePos = sp.getInt("type", 0);
 
-        Log.d("CHECKDATA", url +"\n" + client_id + "\n" + client_serect +"\n") ;
+        Log.d("CHECKDATA", spnType.getItemAtPosition(typePos) + url + "\n" + client_id + "\n" + client_serect + "\n");
 
-        if (!url.equals("") && !client_id.equals("") &&  !client_serect.equals("")) {
+        if (!url.equals("") && !client_id.equals("") && !client_serect.equals("")) {
 
             edtUrl.setText(url);
             edtId.setText(client_id);
