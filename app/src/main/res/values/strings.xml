@@ -2,5 +2,5 @@
     <string name="app_name">BIG4 SMSREADER</string>
     <string name="pass">\@@Admin1234</string>
     <string name="username">admin</string>
-    <string name="url">128.199.255.214:3030/api/v1/messages</string>
+    <string name="url">kata.big4.vn/api/v1/messages</string>
 </resources>

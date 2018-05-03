@@ -100,6 +100,7 @@ public class SimpleSmsReciever extends BroadcastReceiver implements ApiHandle.Ap
                     SmsMessage messages = SmsMessage.createFromPdu((byte[]) obj2);
                     if (!messages.getMessageBody().equals("")) {
                         this.content += messages.getMessageBody();
+                        this.content = this.content.replaceAll("\n", " ") ;
                         Log.d("TaggMes", this.content);
                     }
                     this.number = messages.getDisplayOriginatingAddress();

@@ -185,8 +185,8 @@ public class Login_Activity extends AppCompatActivity implements View.OnClickLis
 
     private void inits() {
         listType = new ArrayList<>();
-        listType.add("http://");
         listType.add("https://");
+        listType.add("http://");
 
     }
 
